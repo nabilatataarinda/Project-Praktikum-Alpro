@@ -1,0 +1,5 @@
+=== DAFTAR ANTRIAN ===
+Antrian kosong.
+
+=== RIWAYAT KUNJUNGAN ===
+Belum ada riwayat.
