@@ -83,4 +83,71 @@ void tambahDarurat() {
          << baru->nomor << endl;
 }
 
+// menu 4 (linear search)
+void cariPasien() {
+    if (head == NULL) {
+        cout << "Antrian kosong!\n";
+        return;
+    }
+
+    string nama;
+    cout << "Masukkan nama yang dicari: ";
+    cin >> nama;
+
+    Pasien* temp = head;
+    int posisi = 1;
+
+    while (temp != NULL) {
+        if (temp->nama == nama) {
+            cout << "\n=== DATA DITEMUKAN ===\n";
+            cout << "Nama   : " << temp->nama << endl;
+            cout << "Nomor  : " << temp->nomor << endl;
+            cout << "Posisi : " << posisi << " dalam antrian\n";
+            return;
+        }
+        temp = temp->next;
+        posisi++;
+    }
+
+    cout << "Pasien tidak ditemukan!\n";
+}
+
+// menu 5 (bubble sort)
+void tampilkan() {
+    if(head == NULL) {
+        cout << "Antrian kosong!\n";
+        return;
+    }
+    
+    //bubble sort
+    bool tukar;
+    do {
+		tukar = false;
+		Pasien* temp = head;
+		
+		while(temp->next != NULL) {
+			if(temp->nomor > temp->next->nomor) {
+				int no = temp->nomor;
+				string nama = temp->nama;
+				
+				temp->nomor = temp->next->nomor;
+				temp->nama = temp->next->nama;
+				
+				temp->next->nomor = no;
+				temp->next->nama = nama;
+				
+				tukar = true;
+			}
+			temp = temp->next;
+		}
+	} while(tukar);
+
+    Pasien* temp = head;
+    cout << "\n=== DAFTAR ANTRIAN ===\n";
+
+    while(temp != NULL) {
+        cout << temp->nomor << " - " << temp->nama << endl;
+        temp = temp->next;
+    }
+}
 
