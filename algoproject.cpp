@@ -151,3 +151,57 @@ void tampilkan() {
     }
 }
 
+// menu 6
+void tampilRiwayat() {
+	if(riwayat == NULL) {
+		cout << "Belum ada riwayat!\n";
+		return;
+	}
+	
+	Pasien* temp = riwayat;
+	
+	cout << "\n=== RIWAYAT KUNJUNGAN ===\n";
+	
+	while(temp != NULL) {
+		cout << temp->nomor << " - " << temp->nama << endl;
+		temp = temp->next;
+	}
+}
+
+// menu 7
+void simpanFile() {
+    FILE* file = fopen("data_antrian.txt", "w");
+
+    if (file == NULL) {
+        cout << "Gagal membuka file!\n";
+        return;
+    }
+
+    fprintf(file, "=== DAFTAR ANTRIAN ===\n");
+
+    if (head == NULL) {
+        fprintf(file, "Antrian kosong.\n");
+    } else {
+        Pasien* temp = head;
+        while (temp != NULL) {
+            fprintf(file, "%d - %s\n", temp->nomor, temp->nama.c_str());
+            temp = temp->next;
+        }
+    }
+	
+   fprintf(file, "\n=== RIWAYAT KUNJUNGAN ===\n");
+
+    if (riwayat == NULL) {
+        fprintf(file, "Belum ada riwayat.\n");
+    } else {
+        Pasien* temp = riwayat;
+        while (temp != NULL) {
+            fprintf(file, "%d - %s\n", temp->nomor, temp->nama.c_str());
+            temp = temp->next;
+        }
+    }
+
+    fclose(file);
+    cout << "Data berhasil disimpan ke 'data_antrian.txt'!\n";
+}
+
