@@ -205,3 +205,33 @@ void simpanFile() {
     cout << "Data berhasil disimpan ke 'data_antrian.txt'!\n";
 }
 
+int main() {
+    int pilih;
+    
+    do {
+        cout << "\n===== MENU =====\n";
+        cout << "1. Ambil Antrian\n";
+        cout << "2. Panggil Pasien\n";
+        cout << "3. Pasien Darurat\n";
+        cout << "4. Cari Pasien\n";
+        cout << "5. Tampilkan Antrian\n";
+        cout << "6. Riwayat Kunjungan\n";
+        cout << "7. Simpan File\n";
+        cout << "Pilih: ";
+        cin >> pilih;
+
+        switch(pilih) {
+            case 1: ambilAntrian(); break;
+            case 2: panggilPasien(); break;
+            case 3: tambahDarurat(); break;
+            case 4: cariPasien(); break;
+            case 5: tampilkan(); break;
+            case 6: tampilRiwayat(); break;
+            case 7: simpanFile(); break;
+            case 8: cout << "Keluar...\n"; break;
+            default: cout << "Pilihan salah!\n";
+}
+} while(pilih != 8);
+
+    return 0;
+}
