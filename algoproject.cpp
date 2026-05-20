@@ -246,8 +246,8 @@ void menuRiwayat() {
     do {
 
         cout << "\n=== MENU RIWAYAT ===\n";
-        cout << "1. Tampilkan Dari Awal\n";
-        cout << "2. Tampilkan Dari Akhir\n";
+        cout << "1. Tampilkan Riwayat Kunjungan - Ascending\n";
+        cout << "2. Tampilkan Riwayat Kunnjungan - Descending\n";
         cout << "3. Kembali\n";
         cout << "Pilih: ";
         cin >> pilih;
@@ -335,14 +335,14 @@ int main() {
 
     do {
 
-        cout << "\n===== MENU =====\n";
-        cout << "1. Ambil Antrian\n";
+        cout << "\n===== MENU SISTEM ANTRIAN RUMAH SAKIT =====\n";
+        cout << "1. Ambil Antrian Untuk Pasien\n";
         cout << "2. Panggil Pasien\n";
-        cout << "3. Pasien Darurat\n";
-        cout << "4. Cari Pasien\n";
-        cout << "5. Tampilkan Antrian\n";
-        cout << "6. Riwayat Kunjungan\n";
-        cout << "7. Simpan File\n";
+        cout << "3. Tambah Pasien Darurat\n";
+        cout << "4. Cari Pasien Terdaftar\n";
+        cout << "5. Tampilkan Antrian Pasien\n";
+        cout << "6. Riwayat Kunjungan\n"; //kalau mau menu 6 harus cari dulu pasiennya
+        cout << "7. Simpan File Data Pasien\n";
         cout << "8. Keluar\n";
         cout << "Pilih: ";
         cin >> pilih;
