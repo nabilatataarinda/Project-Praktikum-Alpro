@@ -216,40 +216,6 @@ void tampilRiwayatMundur() {
     }
 }
 
-void menuRiwayat() {
-
-    int pilih;
-
-    do {
-
-        cout << "\n=== MENU RIWAYAT ===\n";
-        cout << "1. Tampilkan Riwayat Kunjungan - Ascending\n";
-        cout << "2. Tampilkan Riwayat Kunnjungan - Descending\n";
-        cout << "3. Kembali\n";
-        cout << "Pilih: ";
-        cin >> pilih;
-
-        switch(pilih) {
-
-            case 1:
-                tampilRiwayatMaju();
-                break;
-
-            case 2:
-                tampilRiwayatMundur();
-                break;
-
-            case 3:
-                cout << "Kembali ke menu utama...\n";
-                break;
-
-            default:
-                cout << "Pilihan salah!\n";
-        }
-
-    } while(pilih != 3);
-}
-
 // Fungsi Simpan ke File data_antrian.txt
 void simpanFile() {
     FILE* file = fopen("data_antrian.txt", "w");
