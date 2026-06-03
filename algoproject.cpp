@@ -194,7 +194,7 @@ void tampilRiwayatMaju() {
     }
 
     Pasien* temp = riwayatHead;
-    cout << "\n=== RIWAYAT KUNJUNGAN (DESC) ===\n";
+    cout << "\n=== RIWAYAT KUNJUNGAN (ASC) ===\n";
     while (temp != NULL) {
         cout << "No. " << temp->nomor << " - " << temp->nama << endl;
         temp = temp->next;
@@ -209,7 +209,7 @@ void tampilRiwayatMundur() {
     }
 
     Pasien* temp = riwayatTail;
-    cout << "\n=== RIWAYAT KUNJUNGAN (ASC) ===\n";
+    cout << "\n=== RIWAYAT KUNJUNGAN (DESC) ===\n";
     while (temp != NULL) {
         cout << "No. " << temp->nomor << " - " << temp->nama << endl;
         temp = temp->prev;
