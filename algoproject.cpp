@@ -25,32 +25,6 @@ Pasien* riwayatTail = NULL;
 // Counter untuk nomor antrian pasien reguler berikutnya
 int nomorAntrian = 1;
 
-void ambilAntrian() {
-    string nama;
-
-    cout << "Masukkan nama pasien: ";
-    cin >> nama;
-	
-	// Membuat node pasien baru
-    Pasien* baru = new Pasien();
-
-    baru->nomor = nomorAntrian++;
-    baru->nama = nama;
-    baru->next = NULL;
-    baru->prev = NULL;
-	
-	// Jika antrian kosong
-    if(head == NULL) {
-        head = tail = baru;
-    } else {
-		// Tambah node ke belakang antrian
-        tail->next = baru;
-        tail = baru;
-    }
-
-    cout << "Nomor antrian: " << baru->nomor << endl;
-}
-
 // Fungsi Tambah Pasien Reguler (Masuk dari Belakang/Tail)
 void tambahReguler() {
     string nama;
