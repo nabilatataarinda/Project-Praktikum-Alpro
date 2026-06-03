@@ -4,7 +4,7 @@
 
 using namespace std;
 
-// Struktur Node untuk Doubly Linked List Pasien
+// Node untuk menyimpan data pasien
 struct Pasien {
     int nomor;
     string nama;
@@ -12,16 +12,44 @@ struct Pasien {
     Pasien* prev;
 };
 
-// Pointer Global untuk Antrian Utama
+// Implementasi Linked List Tunggal Head-Tail
+// Pointer awal dan akhir antrian aktif
 Pasien* head = NULL;
 Pasien* tail = NULL;
 
-// Pointer Global untuk Riwayat Kunjungan
+// Implementasi Linked List Ganda
+// Pointer awal dan akhir riwayat kunjungan
 Pasien* riwayatHead = NULL;
 Pasien* riwayatTail = NULL;
 
 // Counter untuk nomor antrian pasien reguler berikutnya
 int nomorAntrian = 1;
+
+void ambilAntrian() {
+    string nama;
+
+    cout << "Masukkan nama pasien: ";
+    cin >> nama;
+	
+	// Membuat node pasien baru
+    Pasien* baru = new Pasien();
+
+    baru->nomor = nomorAntrian++;
+    baru->nama = nama;
+    baru->next = NULL;
+    baru->prev = NULL;
+	
+	// Jika antrian kosong
+    if(head == NULL) {
+        head = tail = baru;
+    } else {
+		// Tambah node ke belakang antrian
+        tail->next = baru;
+        tail = baru;
+    }
+
+    cout << "Nomor antrian: " << baru->nomor << endl;
+}
 
 // Fungsi Tambah Pasien Reguler (Masuk dari Belakang/Tail)
 void tambahReguler() {
@@ -78,6 +106,40 @@ void tambahDarurat() {
         head = baru;
     }
     cout << "Pasien darurat " << nama << " berhasil ditambahkan di urutan pertama (Nomor 1)!\n";
+}
+
+void cariPasien() {
+    if(head == NULL) {
+        cout << "Antrian kosong!\n";
+        return;
+    }
+
+    string nama;
+    cout << "Masukkan nama pasien: ";
+    cin >> nama;
+	
+	// Mulai pencarian dari head
+    Pasien* temp = head;
+    int posisi = 1;
+	
+	// Sequential Search berdasarkan nama
+    while(temp != NULL) {
+
+        if(temp->nama == nama) {
+
+            cout << "\n=== DATA DITEMUKAN ===\n";
+            cout << "Nama   : " << temp->nama << endl;
+            cout << "Nomor  : " << temp->nomor << endl;
+            cout << "Posisi : " << posisi << endl;
+
+            return;
+        }
+
+        temp = temp->next;
+        posisi++;
+    }
+
+    cout << "Pasien tidak ditemukan!\n";
 }
 
 // Fungsi Mengurutkan dan Menampilkan Antrian (Bubble Sort)
@@ -178,6 +240,40 @@ void tampilRiwayatMundur() {
         cout << "No. " << temp->nomor << " - " << temp->nama << endl;
         temp = temp->prev;
     }
+}
+
+void menuRiwayat() {
+
+    int pilih;
+
+    do {
+
+        cout << "\n=== MENU RIWAYAT ===\n";
+        cout << "1. Tampilkan Riwayat Kunjungan - Ascending\n";
+        cout << "2. Tampilkan Riwayat Kunnjungan - Descending\n";
+        cout << "3. Kembali\n";
+        cout << "Pilih: ";
+        cin >> pilih;
+
+        switch(pilih) {
+
+            case 1:
+                tampilRiwayatMaju();
+                break;
+
+            case 2:
+                tampilRiwayatMundur();
+                break;
+
+            case 3:
+                cout << "Kembali ke menu utama...\n";
+                break;
+
+            default:
+                cout << "Pilihan salah!\n";
+        }
+
+    } while(pilih != 3);
 }
 
 // Fungsi Simpan ke File data_antrian.txt
