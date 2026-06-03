@@ -295,11 +295,12 @@ int main() {
         cout << "2. Tambah Pasien Darurat (IGD)\n";
         cout << "3. Tampilkan Antrian Saat Ini\n";
         cout << "4. Panggil Pasien Berikutnya\n";
-        cout << "5. Lihat Riwayat Kunjungan (Maju)\n";
-        cout << "6. Lihat Riwayat Kunjungan (Mundur)\n";
-        cout << "7. Simpan Data ke File Teks\n";
-        cout << "8. Keluar Program\n";
-        cout << "Pilihan menu [1-8]: ";
+		cout << "5. Cari Pasien\n";
+        cout << "6. Lihat Riwayat Kunjungan (Maju)\n";
+        cout << "7. Lihat Riwayat Kunjungan (Mundur)\n";
+        cout << "8. Simpan Data ke File Teks\n";
+        cout << "9. Keluar Program\n";
+        cout << "Pilihan menu [1-9]: ";
         cin >> pilihan;
 
         switch (pilihan) {
@@ -311,16 +312,18 @@ int main() {
             break;
             case 4: panggilPasien(); 
             break;
-            case 5: tampilRiwayatMaju(); 
+			case 5: cariPasien(); 
             break;
-            case 6: tampilRiwayatMundur(); 
+            case 6: tampilRiwayatMaju(); 
             break;
-            case 7: simpanFile(); 
+            case 7: tampilRiwayatMundur(); 
             break;
-            case 8: cout << "Terima kasih. Program selesai.\n"; break;
+            case 8: simpanFile(); 
+            break;
+            case 9: cout << "Terima kasih. Program selesai.\n"; break;
             default: cout << "Pilihan tidak valid, coba lagi.\n";
         }
-    } while (pilihan != 8);
+    } while (pilihan != 9);
 
     return 0;
 }
