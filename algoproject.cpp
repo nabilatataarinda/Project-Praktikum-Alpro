@@ -1,7 +1,10 @@
 #include <iostream>
-#include <stdio.h>
+#include <string>
+#include <cstdio>
+
 using namespace std;
 
+// Struktur Node untuk Doubly Linked List Pasien
 struct Pasien {
     int nomor;
     string nama;
@@ -9,161 +12,88 @@ struct Pasien {
     Pasien* prev;
 };
 
-// Implementasi Linked List Tunggal Head-Tail
+// Pointer Global untuk Antrian Utama
 Pasien* head = NULL;
 Pasien* tail = NULL;
 
-// Implementasi Linked List Ganda
+// Pointer Global untuk Riwayat Kunjungan
 Pasien* riwayatHead = NULL;
 Pasien* riwayatTail = NULL;
 
+// Counter untuk nomor antrian pasien reguler berikutnya
 int nomorAntrian = 1;
 
-void ambilAntrian() {
+// Fungsi Tambah Pasien Reguler (Masuk dari Belakang/Tail)
+void tambahReguler() {
     string nama;
-
-    cout << "Masukkan nama pasien: ";
+    cout << "Masukkan nama pasien reguler: ";
     cin >> nama;
 
     Pasien* baru = new Pasien();
-
     baru->nomor = nomorAntrian++;
     baru->nama = nama;
     baru->next = NULL;
     baru->prev = NULL;
 
-    if(head == NULL) {
-        head = tail = baru;
+    if (head == NULL) {
+        head = baru;
+        tail = baru;
     } else {
         tail->next = baru;
+        baru->prev = tail;
         tail = baru;
     }
-
-    cout << "Nomor antrian: " << baru->nomor << endl;
+    cout << "Pasien reguler " << nama << " berhasil ditambahkan dengan nomor antrian: " << baru->nomor << "\n";
 }
 
-void panggilPasien() {
-    if(head == NULL) {
-        cout << "Antrian kosong!\n";
-        return;
-    }
-
-    Pasien* temp = head;
-
-    cout << "\nMemanggil pasien :\n";
-    cout << "Nama  : " << temp->nama << endl;
-    cout << "Nomor : " << temp->nomor << endl;
-
-    Pasien* selesai = new Pasien();
-
-    selesai->nomor = temp->nomor;
-    selesai->nama = temp->nama;
-
-    selesai->next = NULL;
-    selesai->prev = riwayatTail;
-
-    if(riwayatHead == NULL) {
-        riwayatHead = riwayatTail = selesai;
-    } else {
-        riwayatTail->next = selesai;
-        riwayatTail = selesai;
-    }
-    
-    head = head->next;
-
-   if(head != NULL) {
-    head->prev = NULL;
-    } else {
-    tail = NULL;
-   }
-
-
-    delete temp;
-
-    cout << "Pasien selesai dipanggil.\n";
-}
-
+// Fungsi Tambah Pasien Darurat (Masuk dari Depan, otomatis jadi Nomor 1)
 void tambahDarurat() {
     string nama;
-
-    cout << "Masukkan nama pasien darurat: ";
+    cout << "Masukkan nama pasien DARURAT: ";
     cin >> nama;
 
     Pasien* baru = new Pasien();
-
-    baru->nomor = nomorAntrian++;
+    baru->nomor = 1; // Pasien darurat langsung memotong jadi nomor 1
     baru->nama = nama;
-
-    // pasien darurat masuk paling depan
-    baru->next = head;
+    baru->next = NULL;
     baru->prev = NULL;
 
-    // sambungkan head lama ke node baru
-    if(head != NULL) {
-        head->prev = baru;
-    }
-
-    // pindahkan head ke node baru
-    head = baru;
-
-    if(tail == NULL) {
-        tail = baru;
-    }
-
-    cout << "Pasien darurat berhasil ditambahkan!\n";
-}
-
-void cariPasien() {
-    if(head == NULL) {
-        cout << "Antrian kosong!\n";
-        return;
-    }
-
-    string nama;
-    cout << "Masukkan nama pasien: ";
-    cin >> nama;
-
+    // Geser semua nomor antrian pasien yang sudah ada di dalam list (ditambah 1)
     Pasien* temp = head;
-    int posisi = 1;
-
-    while(temp != NULL) {
-
-        if(temp->nama == nama) {
-
-            cout << "\n=== DATA DITEMUKAN ===\n";
-            cout << "Nama   : " << temp->nama << endl;
-            cout << "Nomor  : " << temp->nomor << endl;
-            cout << "Posisi : " << posisi << endl;
-
-            return;
-        }
-
+    while (temp != NULL) {
+        temp->nomor = temp->nomor + 1;
         temp = temp->next;
-        posisi++;
     }
+    
+    // Counter nomorAntrian global juga ditambah agar pasien reguler berikutnya tidak bentrok
+    nomorAntrian++;
 
-    cout << "Pasien tidak ditemukan!\n";
+    // Masukkan pasien darurat ke posisi paling depan (head)
+    if (head == NULL) {
+        head = baru;
+        tail = baru;
+    } else {
+        baru->next = head;
+        head->prev = baru;
+        head = baru;
+    }
+    cout << "Pasien darurat " << nama << " berhasil ditambahkan di urutan pertama (Nomor 1)!\n";
 }
 
+// Fungsi Mengurutkan dan Menampilkan Antrian (Bubble Sort)
 void tampilkanAntrian() {
-
-    if(head == NULL) {
-        cout << "Antrian kosong!\n";
+    if (head == NULL) {
+        cout << "Antrian pasien kosong!\n";
         return;
     }
 
-    // Bubble Sort
     bool tukar;
-
     do {
         tukar = false;
-
         Pasien* temp = head;
 
-        while(temp->next != NULL) {
-
-            if(temp->nomor > temp->next->nomor) {
-
+        while (temp->next != NULL) {
+            if (temp->nomor > temp->next->nomor) { // bandingkan nomor antrian
                 int no = temp->nomor;
                 string nama = temp->nama;
 
@@ -175,217 +105,152 @@ void tampilkanAntrian() {
 
                 tukar = true;
             }
-
             temp = temp->next;
         }
-
-    } while(tukar);
+    } while (tukar);
 
     Pasien* temp = head;
-
-    cout << "\n=== DAFTAR ANTRIAN ===\n";
-
-    while(temp != NULL) {
-
-        cout << temp->nomor
-             << " - "
-             << temp->nama
-             << endl;
-
+    cout << "\n=== DAFTAR ANTRIAN SAAT INI ===\n";
+    while (temp != NULL) {
+        cout << "No. " << temp->nomor << " - " << temp->nama << endl;
         temp = temp->next;
     }
 }
 
-void tampilRiwayatMaju() {
+// Fungsi Panggil Pasien (Selesai Dilayani -> Masuk ke Riwayat Kunjungan)
+void panggilPasien() {
+    if (head == NULL) {
+        cout << "Tidak ada pasien dalam antrian untuk dipanggil.\n";
+        return;
+    }
 
-    if(riwayatHead == NULL) {
-        cout << "Riwayat kosong!\n";
+    // Ambil pasien paling depan
+    Pasien* dipanggil = head;
+    cout << "\n MEMANGGIL PASIEN: No. " << dipanggil->nomor << " - " << dipanggil->nama << " \n";
+
+    // Lepaskan pasien dari antrian utama
+    head = head->next;
+    if (head != NULL) {
+        head->prev = NULL;
+    } else {
+        tail = NULL; // Jika antrian menjadi kosong
+    }
+
+    // Masukkan pasien yang selesai dilayani ke Linked List Riwayat (Masuk ke Belakang/Tail riwayat)
+    dipanggil->next = NULL;
+    dipanggil->prev = NULL;
+
+    if (riwayatHead == NULL) {
+        riwayatHead = dipanggil;
+        riwayatTail = dipanggil;
+    } else {
+        riwayatTail->next = dipanggil;
+        dipanggil->prev = riwayatTail;
+        riwayatTail = dipanggil;
+    }
+}
+
+// Fungsi Tampil Riwayat Maju (Dari Pertama Sampai Terakhir)
+void tampilRiwayatMaju() {
+    if (riwayatHead == NULL) {
+        cout << "Riwayat kunjungan kosong!\n";
         return;
     }
 
     Pasien* temp = riwayatHead;
-
-
-    while(temp != NULL) {
-
-        cout << temp->nomor
-             << " - "
-             << temp->nama
-             << endl;
-
+    cout << "\n=== RIWAYAT KUNJUNGAN (DESC) ===\n";
+    while (temp != NULL) {
+        cout << "No. " << temp->nomor << " - " << temp->nama << endl;
         temp = temp->next;
     }
 }
 
-
+// Fungsi Tampil Riwayat Mundur (Dari Terbaru Sampai Terlama)
 void tampilRiwayatMundur() {
-
-    if(riwayatTail == NULL) {
-        cout << "Riwayat kosong!\n";
+    if (riwayatTail == NULL) {
+        cout << "Riwayat kunjungan kosong!\n";
         return;
     }
 
     Pasien* temp = riwayatTail;
-
-
-    while(temp != NULL) {
-
-        cout << temp->nomor
-             << " - "
-             << temp->nama
-             << endl;
-
+    cout << "\n=== RIWAYAT KUNJUNGAN (ASC) ===\n";
+    while (temp != NULL) {
+        cout << "No. " << temp->nomor << " - " << temp->nama << endl;
         temp = temp->prev;
     }
 }
 
-void menuRiwayat() {
-
-    int pilih;
-
-    do {
-
-        cout << "\n=== MENU RIWAYAT ===\n";
-        cout << "1. Tampilkan Riwayat Kunjungan - Ascending\n";
-        cout << "2. Tampilkan Riwayat Kunnjungan - Descending\n";
-        cout << "3. Kembali\n";
-        cout << "Pilih: ";
-        cin >> pilih;
-
-        switch(pilih) {
-
-            case 1:
-                tampilRiwayatMaju();
-                break;
-
-            case 2:
-                tampilRiwayatMundur();
-                break;
-
-            case 3:
-                cout << "Kembali ke menu utama...\n";
-                break;
-
-            default:
-                cout << "Pilihan salah!\n";
-        }
-
-    } while(pilih != 3);
-}
-
+// Fungsi Simpan ke File data_antrian.txt
 void simpanFile() {
-
     FILE* file = fopen("data_antrian.txt", "w");
 
-    if(file == NULL) {
+    if (file == NULL) {
         cout << "File gagal dibuat!\n";
         return;
     }
 
-    fprintf(file, "=== DAFTAR ANTRIAN ===\n");
-
-    if(head == NULL) {
-
+    fprintf(file, "=== DAFTAR ANTRIAN PASIEN ===\n");
+    if (head == NULL) {
         fprintf(file, "Antrian kosong.\n");
-
     } else {
-
         Pasien* temp = head;
-
-        while(temp != NULL) {
-
-            fprintf(file,
-                    "%d - %s\n",
-                    temp->nomor,
-                    temp->nama.c_str());
-
+        while (temp != NULL) {
+            fprintf(file, "%d - %s\n", temp->nomor, temp->nama.c_str());
             temp = temp->next;
         }
     }
 
     fprintf(file, "\n=== RIWAYAT KUNJUNGAN ===\n");
-
-    if(riwayatHead == NULL) {
-
+    if (riwayatHead == NULL) {
         fprintf(file, "Belum ada riwayat.\n");
-
     } else {
-
         Pasien* temp = riwayatHead;
-
-        while(temp != NULL) {
-
-            fprintf(file,
-                    "%d - %s\n",
-                    temp->nomor,
-                    temp->nama.c_str());
-
+        while (temp != NULL) {
+            fprintf(file, "%d - %s\n", temp->nomor, temp->nama.c_str());
             temp = temp->next;
         }
     }
 
     fclose(file);
-
-    cout << "Data berhasil disimpan ke file!\n";
+    cout << "Data berhasil disimpan!\n";
 }
 
+// Menu Utama Program
 int main() {
-
-    int pilih;
+    int pilihan;
 
     do {
+        cout << "   ========= SISTEM ANTRIAN RUMAH SAKIT=========  \n";
+        cout << "1. Tambah Pasien Reguler\n";
+        cout << "2. Tambah Pasien Darurat (IGD)\n";
+        cout << "3. Tampilkan Antrian Saat Ini\n";
+        cout << "4. Panggil Pasien Berikutnya\n";
+        cout << "5. Lihat Riwayat Kunjungan (Maju)\n";
+        cout << "6. Lihat Riwayat Kunjungan (Mundur)\n";
+        cout << "7. Simpan Data ke File Teks\n";
+        cout << "8. Keluar Program\n";
+        cout << "Pilihan menu [1-8]: ";
+        cin >> pilihan;
 
-        cout << "\n===== MENU SISTEM ANTRIAN RUMAH SAKIT =====\n";
-        cout << "1. Ambil Antrian Untuk Pasien\n";
-        cout << "2. Panggil Pasien\n";
-        cout << "3. Tambah Pasien Darurat\n";
-        cout << "4. Cari Pasien Terdaftar\n";
-        cout << "5. Tampilkan Antrian Pasien\n";
-        cout << "6. Riwayat Kunjungan\n"; //kalau mau menu 6 harus cari dulu pasiennya
-        cout << "7. Simpan File Data Pasien\n";
-        cout << "8. Keluar\n";
-        cout << "Pilih: ";
-        cin >> pilih;
-
-        switch(pilih) {
-
-            case 1:
-                ambilAntrian();
-                break;
-
-            case 2:
-                panggilPasien();
-                break;
-
-            case 3:
-                tambahDarurat();
-                break;
-
-            case 4:
-                cariPasien();
-                break;
-
-            case 5:
-                tampilkanAntrian();
-                break;
-
-            case 6:
-                menuRiwayat();
-                break;
-
-            case 7:
-                simpanFile();
-                break;
-
-            case 8:
-                cout << "Program selesai.\n";
-                break;
-
-            default:
-                cout << "Pilihan salah!\n";
+        switch (pilihan) {
+            case 1: tambahReguler(); 
+            break;
+            case 2: tambahDarurat(); 
+            break;
+            case 3: tampilkanAntrian(); 
+            break;
+            case 4: panggilPasien(); 
+            break;
+            case 5: tampilRiwayatMaju(); 
+            break;
+            case 6: tampilRiwayatMundur(); 
+            break;
+            case 7: simpanFile(); 
+            break;
+            case 8: cout << "Terima kasih. Program selesai.\n"; break;
+            default: cout << "Pilihan tidak valid, coba lagi.\n";
         }
-
-    } while(pilih != 8);
+    } while (pilihan != 8);
 
     return 0;
 }
